@@ -1,0 +1,157 @@
+WEEK 2
+
+**Lecture 2 - Heuristic Search**
+
+**Reading**
+• read Russell & Norvig chapter 2
+• read Miller’s intro to MCTS
+• read Russell & Norvig chapters 3 and 6
+    ◦ *or* read the Berkeley lecture notes
+    ◦ *or* watch the Harvard CS50 lectures 0, 1 and 3
+
+- [ ]  explain the role of uninformed and informed heuristic search in AI, including the stating the use of minimax search in Deep Blue and MCTS in AlphaGo
+- [ ]  contrast how A* algorithm differs from greedy best-first first and uniform cost search•
+- [ ]  apply the A* algorithm, including creating an admissible heuristic especially from a relaxation
+- [ ]  apply the MCTS algorithm on simple examples, and discuss its advantages and disadvantages compared with minimax search
+- [ ]  discuss the role of machine learning in creating heuristics, especially in game tree search
+
+**Lecture 3 - Logical Reasoning
+Reading**
+• read Russell & Norvig chapter 7
+• read Russell & Norvig chapters 8 (esp. 8.1-8.3) and 9 (esp. 9.1, 9.2, 9.5)
+
+- [ ]  explain the key steps of propositional and first-order resolution
+- [ ]  execute resolution algorithm in propositional and first-order theories
+- [ ]  understand the strengths and weaknesses of different logical languages
+
+---
+
+WEEK 3
+
+**Lecture 4 - Planning
+Reading**
+• read Russell & Norvig chapter 11
+
+- [ ]  explain what AI planning, and situate it within AI
+- [ ]  explain different approaches to finding plans
+- [ ]  read (parse) planning problems written in PDDL
+- [ ]  represent (write) a problem in PDDL terms (semantically, not syntactically)
+- [ ]  reason whether a model or plan is correct and effective
+
+**Lecture 5 - Constraint Network
+Reading**
+• read Dechter *Graphical Models* (2ed) chapters 1-3
+• read Russell & Norvig chapter 5
+
+- [ ]  contrast logical and graphical representations of knowledge
+- [ ]  explain how constraint networks are a special case of graphical models
+- [ ]  represent a given problem as a GM or CN
+- [ ]  state the definition of a constraint satisfaction problem, and briefly discuss the role of search and inference
+- [ ]  apply the bucket elimination algorithm to simple problems
+
+---
+
+WEEK 4
+
+**Lecture 6 - Uncertainty**
+
+- [ ]  explain the spectrum of learning from optimization to probability theory
+- [ ]  master (recognize, reproduce, apply and explain) Bayes rule
+- [ ]  explain the need for probabilities in AI
+- [ ]  represent a problem as a Bayesian network
+- [ ]  state and explain the semantics of BNs
+- [ ]  apply inference methods on BNs
+
+Concepts:
+
+- Cox’ Theorem, Bayes’ Rule, Bayesian Networks, Local Semantics (e.g. Markov Blanket)
+- Exact inference: Variable Estimation, Ancestral Sampling
+- Approximate inference: Rejection Sampling, Rejection Sampling, Likelihood Weighting
+
+**Lecture 7 - Learning**
+
+- [ ]  state forms of learning, and explain the reasons for applying these
+- [ ]  explain learning methods on a spectrum ranging from idealistic (statistical) learning to pragmatic learning (optimization)
+- [ ]  contrast Bayesian learning and maximum likelihood
+- [ ]  translate a given learning problem into a formal problem of learning a Bayesian network
+- [ ]  explain and apply the principle of maximum likelihood estimation
+- [ ]  apply Bayesian learning with beta distributions, including specifying priors
+
+---
+
+WEEK 5
+
+**Lecture 8 - Relational probabilistic models**
+
+- [ ]  explain how logical and probabilistic models can be combined into a single framework
+- [ ]  explain how logical and probabilistic reasoning are a special case of relational probabilistic models
+- [ ]  apply the automated reasoning procedures to concrete problems
+
+**Lecture 9 - Utility and actions**
+
+- [ ]  state and explain (different variants of) the principle of MEU, as well as to apply it to derive a rational action
+- [ ]  calculate the expected utility in an example
+- [ ]  recognize and describe the potential issues with MEU if the components are not correctly specified
+- [ ]  list the ‘reasonable’ properties for preferences as postulated by the axioms of utility
+- [ ]  state that, for typical people, the marginal utility of money is decreasing, and explain that this is due to the concave/logarithmic shape of the curve for the utility of money
+- [ ]  state the formal definition of a lottery, and compute its expected value
+- [ ]  explain that this concave shape of the curve is a direct result of the (typical) risk-averseness of people, and that this can be seen in the graph by the fact that (typical) people prefer to have *X* euros, rather than engaging in a lottery with expected value *X*
+- [ ]  explain what a Pareto front is, and interpret a visualization of a Pareto front
+- [ ]  recall the definition of a VNM utility function; and describe that by defining ‘value’ of a lottery to be the ‘expected utility’, a VNM function gives the motivation for the principle of MEU; and state that a VNM utility function exists if the decision makers preferences satisfy the axioms of utility
+- [ ]  interpret and construct an influence diagram (aka decision network), as well as do computations with it
+- [ ]  discuss difficulties that arise when specifying utilities for an intelligent agent
+- [ ]  reflect on the value of life, and to explain that we cannot avoid to implicitly put a value on human life
+- [ ]  describe that human preferences are complex, and depend on many personal, cultural and contextual factors, and give examples of this
+- [ ]  illustrate that even small changes in utility can lead to vastly different behaviours
+- [ ]  define value alignment, and explain that wrong incentives for AI could potentially lead to very big problems once intelligent agents and robots become omnipresent
+- [ ]  describe the appeal of learning human preferences, but also appraise the difficulties (estimation errors, assuming an arbitrary (boundedly rational) decision making method, or non-identifiability)
+- [ ]  describe the optimizer’s curse and illustrate it with an example, or recognize its occurence in an example
+
+---
+
+WEEK 6
+
+**Lecture 10- MDPs**
+
+- [ ]  define the components of a Markov Decision Process (states, actions, transition probabilities, rewards) and the Markov property
+- [ ]  differentiate between episodic and continuing tasks, and explain the role of discounting in infinite-horizon problems
+- [ ]  formulate sequential stochastic problems as MDPs
+- [ ]  explain and recall the Bellman equations
+- [ ]  apply dynamic programming methods to evaluate policies, including iterative policy evaluation, policy iteration and value iteration to determine optimal policies
+- [ ]  analyze the process of of such DP methods and demonstrate how value functions converge
+
+---
+
+WEEK 7
+
+**Lecture 11 - Partial Observality**
+
+- [ ]  explain the reasons for and impact of partial observability
+- [ ]  recall the components of a POMDP, and describe their role
+- [ ]  model a problem as a POMDP
+- [ ]  perform belief updates using Bayes’ rule
+- [ ]  convert a POMDP to a history MDP or belief MDP
+- [ ]  apply MLS and QMDP heuristics
+- [ ]  recall that the value function can be expressed using vectors as a PWLC function
+
+**Lecture 12 - RL**
+
+- [ ]  define the reinforcement learning (RL) problem and differentiate between passive vs. active learning, model-based vs. model-free approaches.
+- [ ]  apply model-free policy evaluation techniques (e.g., Monte Carlo estimation, Temporal-Difference learning) to estimate value functions from experience
+- [ ]  compare and contrast Q-learning and SARSA, and evaluate their strengths and weaknesses in on-policy vs. off-policy learning.
+- [ ]  interpret function approximation methods to scale reinforcement learning beyond tabular settings, and explain the challenges introduced by approximation.
+- [ ]  assess different exploration strategies (e.g., ε-greedy, UCB, R-Max) and justify their importance in balancing exploration and exploitation*.*
+
+---
+
+WEEK 8
+
+**Lecture 13 - Multiagent Decision Making**
+
+- [ ]  explain and use the following concepts in the context of game theory: players, rules, strategies, outcomes, preferences, utility, Pareto efficiency, dominant strategy, dominant strategy equilibrium, pure/mixed best response, Nash equilibrium, zero-sum game, maximin technique, social choice function, type, valuation function, social welfare, transfer, incentive compatible, strategy-proof, second-price auction, Groves mechanisms, quasi-linear utility function, budget balance, individual rationality, Clarke pivot rule, VCG mechanism, dictatorship
+- [ ]  use the following theorems: Nash (1950) theorem, properties of the Groves and VCG mechanism, Gibbard-Satterthwaite
+- [ ]  prove the following: properties of the Nash equilibrium (slide 15), second-price auction is strategy-proof, Groves is strategy-proof
+- [ ]  find a (mixed) Nash equilibrium (e.g. using iterated best response or Von Neumann’s maximin technique), and/or a dominant strategy equilibrium
+- [ ]  model a multiplayer situation as a game
+- [ ]  design a game using transfers, compute VCG transfers
+- [ ]  design a simple game without transfers, or explain an impossibility using the relevant theorem(s)

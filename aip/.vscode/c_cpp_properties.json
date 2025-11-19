@@ -1,0 +1,24 @@
+{
+    "env": {
+        "myIncludePath": [
+            "${workspaceFolder}/assignment*/include", 
+            "${workspaceFolder}/assignment*/src"
+        ],
+        "myDefines": ["DEBUG", "MY_FEATURE=1"]
+    },
+    "configurations": [
+        {
+            "name": "Mac",
+            "intelliSenseMode": "macos-clang-x64",
+            "compilerPath": "/usr/bin/clang++",
+            "includePath": [
+                "${myIncludePath}",
+                "${myIncludePath}/**",
+                "/home/<user>/<path>/<to>/framework/**"
+            ],
+            "cppStandard": "c++20",
+            "macFrameworkPath": ["/System/Library/Frameworks", "/Library/Frameworks"]
+        }
+    ],
+    "version": 4
+}
