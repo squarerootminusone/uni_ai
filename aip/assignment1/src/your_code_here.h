@@ -171,7 +171,7 @@ ImageFloat applyDurandToneMappingOperator(const ImageFloat& base_layer, const Im
     auto result = ImageFloat(base_layer.width, base_layer.height);
 
     // Scale by base_scale and add detail
-    result *= base_scale;
+    result = base_layer * base_scale;
     result += detail_layer;
     
     // Convert from log to linear

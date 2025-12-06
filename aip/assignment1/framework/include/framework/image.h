@@ -38,11 +38,14 @@ public:
     inline T at(int x, int y) const;
     inline size_t size() const;
     void apply(std::function<T(int, int)> kernel);
-    Image<T>& operator*=(int value);
+    Image<T> operator*(float value);
+    Image<T> operator*(const float value) const;
+    Image<T>& operator*=(float value);
     Image<T>& operator+=(Image<T> &other);
     Image<T>& operator+=(const Image<T> &other);
 };
 
+/** Applies a custom kernel to the entire image without padding (borders are cropped). */
 template<typename T>
 void Image<T>::apply(std::function<T(int, int)> kernel) {
     #pragma omp parallel for
@@ -51,8 +54,24 @@ void Image<T>::apply(std::function<T(int, int)> kernel) {
             data[y * width + x] = kernel(x, y);
 }
 
+
 template<typename T>
-Image<T>& Image<T>::operator*=(int value) {
+Image<T> Image<T>::operator*(float value) {
+    return static_cast<const Image<T>&>(*this) * value;
+}
+
+template<typename T>
+Image<T> Image<T>::operator*(const float value) const {
+    Image<T> result(*this);
+    #pragma omp parallel for
+    for (int i = 0; i < size(); i++)
+        result.data[i] *= value;
+
+    return result;
+}
+
+template<typename T>
+Image<T>& Image<T>::operator*=(float value) {
     #pragma omp parallel for
     for (int i = 0; i < size(); i++)
         data[i] *= value;
