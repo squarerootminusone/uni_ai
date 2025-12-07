@@ -43,6 +43,8 @@ public:
     Image<T>& operator*=(float value);
     Image<T>& operator+=(Image<T> &other);
     Image<T>& operator+=(const Image<T> &other);
+    T& operator[](std::size_t index);
+    const T operator[](std::size_t index) const;
 };
 
 /** Applies a custom kernel to the entire image without padding (borders are cropped). */
@@ -65,7 +67,7 @@ Image<T> Image<T>::operator*(const float value) const {
     Image<T> result(*this);
     #pragma omp parallel for
     for (int i = 0; i < size(); i++)
-        result.data[i] *= value;
+        result[i] *= value;
 
     return result;
 }
@@ -88,9 +90,19 @@ template<typename T>
 Image<T>& Image<T>::operator+=(const Image<T> &other) {
     #pragma omp parallel for
     for (int i = 0; i < size(); i++)
-        data[i] += other.data[i];
+        data[i] += other[i];
 
     return *this;
+}
+
+template<typename T>
+T& Image<T>::operator[](std::size_t index) {
+    return data[index];
+}
+
+template<typename T>
+const T Image<T>::operator[](std::size_t index) const {
+    return data[index];
 }
 
 

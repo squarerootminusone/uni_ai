@@ -7,6 +7,7 @@
 #include <tuple>
 #include <vector>
 
+#include "glm/common.hpp"
 #include "glm/exponential.hpp"
 #include "glm/ext/scalar_constants.hpp"
 #include "glm/geometric.hpp"
@@ -134,7 +135,7 @@ ImageFloat bilateralFilter(const ImageFloat& H, const int size, const float spac
     // Empty output image.
     Image<float> result = ImageFloat(H.width, H.height);
 
-    auto kernel = [H, size, space_sigma, range_sigma](int x, int y) -> float {
+    auto kernel = [&](int x, int y) -> float {
         double sum = .0;
         double k = .0;
         
@@ -151,6 +152,7 @@ ImageFloat bilateralFilter(const ImageFloat& H, const int size, const float spac
     };
 
     result.apply(kernel);
+
     // Return filtered intensity.
     return result;
 }
@@ -200,9 +202,10 @@ ImageRGB rescaleRgbByLuminance(const ImageRGB& original_rgb, const ImageFloat& o
     // An empty RGB image for the result.
     auto result = ImageRGB(original_rgb.width, original_rgb.height);
 
-    /*******
-     * TODO: YOUR CODE GOES HERE!!!
-     ******/
+    #pragma omp parallel for
+    for (int i = 0; i < result.size(); i++) 
+        for (int c = 0; c < 3; c++)
+            result[i][c] = glm::clamp(glm::pow(original_rgb[i][c] / std::max(original_luminance[i], EPSILON), saturation) * new_luminance[i], (float).0, (float).1);
 
     return result;
 }
