@@ -231,26 +231,24 @@ ImageGradient getGradients(const ImageFloat& image)
     auto grad = ImageGradient({ image.width + 1, image.height + 1 }, { image.width + 1, image.height + 1 });
 
     printf("(%d %d)\n", image.width, image.height);
+
+    // Gradient
+    for (int y = 1; y < grad.dy.height; y++) {
+        for (int x = 1; x < grad.dx.width; x++) {
+            grad.dx[y * grad.dx.width + x] = image.at(x, y - 1) - image.at(x - 1, y - 1);
+            grad.dy[y * grad.dy.width + x] = image.at(x - 1, y) - image.at(x - 1, y - 1);
+        }
+    }
+
     // Bounadries
     for (int x = 0; x < image.width; x++) {
         grad.dy[x + 1] = image.at(x, 0); // top
         grad.dy[image.height * grad.dy.width + x + 1] = -image.at(x, image.height - 1); // bottom
     }
-    for (int x = 0; x < image.width; x++)
-        grad.dx[image.height * grad.dy.width + x + 1] = image.at(x + 1, image.height - 1) - image.at(x, image.height - 1);
+
     for (int y = 0; y < image.height; y++) {
         grad.dx[(y + 1) * grad.dx.width] = image.at(0, y); // left
         grad.dx[(y + 2) * grad.dx.width - 1] = -image.at(image.width - 1, y); // right
-    }
-    for (int y = 1; y < image.height; y++)
-        grad.dy[(y + 1) * grad.dx.width - 1] = image.at(image.width - 1, y) - image.at(image.width - 1, y - 1);
-
-    // Gradient
-    for (int y = 1; y < grad.dy.height - 1; y++) {
-        for (int x = 1; x < grad.dx.width - 1; x++) {
-            grad.dx[y * grad.dx.width + x] = image.at(x, y - 1) - image.at(x - 1, y - 1);
-            grad.dy[y * grad.dy.width + x] = image.at(x - 1, y) - image.at(x - 1, y - 1);
-        }
     }
 
     // Return both gradients in an ImageGradient struct.
@@ -285,9 +283,12 @@ ImageGradient copySourceGradientsToTarget(const ImageGradient& source, const Ima
                 result.dx[y * result.dx.width + x] = .0;
         
             else 
-                result.dx[y * result.dx.width + x] = org ? source.dx.at(x - 1, y - 1) : target.dx.at(x - 1, y - 1);
+                result.dx[y * result.dx.width + x] = org ? target.dx.at(x, y) : source.dx.at(x, y);
         }
     }
+
+    for (int y = 0; y < result.dx.height; y++)
+        result.dx[y * result.dx.width] = target.dx.at(0, y);
         
     for (int y = 1; y < result.dy.height; y++) {
         for (int x = 1; x < result.dy.width; x++) {
@@ -299,10 +300,12 @@ ImageGradient copySourceGradientsToTarget(const ImageGradient& source, const Ima
                 result.dy[y * result.dy.width + x] = .0;
         
             else 
-                result.dy[y * result.dy.width + x] = org ? source.dx.at(x - 1, y - 1) : target.dx.at(x - 1, y - 1);
+                result.dy[y * result.dy.width + x] = org ? target.dy.at(x, y) : source.dy.at(x, y);
         }
     }
 
+    for (int x = 0; x < result.dx.width; x++) 
+        result.dy[x] = target.dx.at(x, 0);
 
     return result;
 }
