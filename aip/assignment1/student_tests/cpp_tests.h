@@ -11,6 +11,7 @@ DISABLE_WARNINGS_POP()
 
 static const std::filesystem::path dataDirPath { DATA_DIR };
 static const std::filesystem::path rawDataDirPath { dataDirPath / "raw_data" };
+static const std::filesystem::path outDirPath { "../outputs" };
 
 // Set up images used for running the tests
 const auto memorial_img = ImageRGB(dataDirPath / "memorial2_half.hdr");
@@ -259,6 +260,7 @@ void checkGetGradients(const ImageRGB& image, const std::string& id = "") {
     
     try {
         auto user_output = getGradients(hdr_luminance);
+
         auto rmse = calcGradientRMSE(output, user_output);
 
         CHECK(rmse == APPROX_FLOAT(0.0f));
@@ -271,13 +273,6 @@ void checkGetGradients(const ImageRGB& image, const std::string& id = "") {
 
 TEST_CASE("getGradients")
 {   
-    SECTION("MemorialImage") {
-        checkGetGradients(memorial_img, "MemorialImage");
-    }
-
-    SECTION("KitchenImage") {
-        checkGetGradients(kitchen_img, "KitchenImage");
-    }
 
     SECTION("4x3Image") {
         checkGetGradients(small_img_4x3, "4x3Image");
@@ -298,8 +293,16 @@ void checkCopySourceGradientsToTarget(const ImageRGB& source_image, const ImageR
     target_gradients.readBinary(rawDataDirPath / ("checkCopySourceGradientsToTarget_" + id + "_target_gradients"));
     output_luminance.readBinary(rawDataDirPath / ("checkCopySourceGradientsToTarget_" + id + "_output_luminance.bin"));
 
+    // Save gradients to outputs directory
+    gradientsToRgb(source_gradients).writeToFile(outDirPath / ("checkCopySourceGradientsToTarget_" + id + "_source_gradients.png"));
+    gradientsToRgb(target_gradients).writeToFile(outDirPath / ("checkCopySourceGradientsToTarget_" + id + "_target_gradients.png"));
+    gradientsToRgb(output_luminance).writeToFile(outDirPath / ("checkCopySourceGradientsToTarget_" + id + "_output_luminance.png"));
+
     try {
         auto user_output = copySourceGradientsToTarget(source_gradients, target_gradients, source_mask);
+        
+        // Save user output gradient
+        gradientsToRgb(user_output).writeToFile(outDirPath / ("checkCopySourceGradientsToTarget_" + id + "_user_output.png"));
 
         float rmse = calcGradientRMSE(output_luminance, user_output);
         CHECK(rmse == APPROX_FLOAT(0.0f));

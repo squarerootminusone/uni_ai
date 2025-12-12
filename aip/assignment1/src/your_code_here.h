@@ -205,7 +205,7 @@ ImageRGB rescaleRgbByLuminance(const ImageRGB& original_rgb, const ImageFloat& o
     #pragma omp parallel for
     for (int i = 0; i < result.size(); i++) 
         for (int c = 0; c < 3; c++)
-            result[i][c] = glm::clamp(glm::pow(original_rgb[i][c] / std::max(original_luminance[i], EPSILON), saturation) * new_luminance[i], (float).0, (float).1);
+            result[i][c] = glm::clamp(glm::pow(original_rgb[i][c] / std::max(original_luminance[i], EPSILON), saturation) * new_luminance[i], (float).0, (float)1.0);
 
     return result;
 }
@@ -230,13 +230,28 @@ ImageGradient getGradients(const ImageFloat& image)
     // An empty gradient pair (dx, dy).
     auto grad = ImageGradient({ image.width + 1, image.height + 1 }, { image.width + 1, image.height + 1 });
 
-    /*******
-     * TODO: YOUR CODE GOES HERE!!!
-     ******/
+    printf("(%d %d)\n", image.width, image.height);
+    // Bounadries
+    for (int x = 0; x < image.width; x++) {
+        grad.dy[x + 1] = image.at(x, 0); // top
+        grad.dy[image.height * grad.dy.width + x + 1] = -image.at(x, image.height - 1); // bottom
+    }
+    for (int x = 0; x < image.width; x++)
+        grad.dx[image.height * grad.dy.width + x + 1] = image.at(x + 1, image.height - 1) - image.at(x, image.height - 1);
+    for (int y = 0; y < image.height; y++) {
+        grad.dx[(y + 1) * grad.dx.width] = image.at(0, y); // left
+        grad.dx[(y + 2) * grad.dx.width - 1] = -image.at(image.width - 1, y); // right
+    }
+    for (int y = 1; y < image.height; y++)
+        grad.dy[(y + 1) * grad.dx.width - 1] = image.at(image.width - 1, y) - image.at(image.width - 1, y - 1);
 
-    // Example:
-    // grad.dx.data[getImageOffset(grad.dx, 0, 0)] = 0.0f; // TODO: Change this!
-    // grad.dy.data[getImageOffset(grad.dy, 0, 0)] = 0.0f; // TODO: Change this!
+    // Gradient
+    for (int y = 1; y < grad.dy.height - 1; y++) {
+        for (int x = 1; x < grad.dx.width - 1; x++) {
+            grad.dx[y * grad.dx.width + x] = image.at(x, y - 1) - image.at(x - 1, y - 1);
+            grad.dy[y * grad.dy.width + x] = image.at(x - 1, y) - image.at(x - 1, y - 1);
+        }
+    }
 
     // Return both gradients in an ImageGradient struct.
     return grad;
@@ -258,10 +273,36 @@ ImageGradient copySourceGradientsToTarget(const ImageGradient& source, const Ima
 {   
     // An empty gradient pair (dx, dy).
     ImageGradient result = ImageGradient({ target.dx.width, target.dx.height }, { target.dx.width, target.dx.height });
+    printf("source: (%d %d)\ntarget: (%d %d)\nmask: (%d %d)\n", source.dx.width, source.dx.height, target.dx.width, target.dx.height, source_mask.width, source_mask.height);
 
-    /*******
-     * TODO: YOUR CODE GOES HERE!!!
-     ******/
+    for (int y = 1; y < result.dx.height; y++) {
+        for (int x = 1; x < result.dx.width; x++) {
+            bool org = source_mask.at(x - 1, y - 1) <= 0.5;
+            bool next = source_mask.at(x, y - 1) <= 0.5;
+
+            // If it's a boundary
+            if (org ^ next)
+                result.dx[y * result.dx.width + x] = .0;
+        
+            else 
+                result.dx[y * result.dx.width + x] = org ? source.dx.at(x - 1, y - 1) : target.dx.at(x - 1, y - 1);
+        }
+    }
+        
+    for (int y = 1; y < result.dy.height; y++) {
+        for (int x = 1; x < result.dy.width; x++) {
+            bool org = source_mask.at(x - 1, y - 1) <= 0.5;
+            bool next = source_mask.at(x - 1, y) <= 0.5;
+
+            // If it's a boundary
+            if (org ^ next)
+                result.dy[y * result.dy.width + x] = .0;
+        
+            else 
+                result.dy[y * result.dy.width + x] = org ? source.dx.at(x - 1, y - 1) : target.dx.at(x - 1, y - 1);
+        }
+    }
+
 
     return result;
 }
